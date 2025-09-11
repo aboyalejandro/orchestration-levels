@@ -1,0 +1,49 @@
+name: Piwik ETL
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to process (YYYY-MM-DD)'
+        required: false
+        default: ''
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install poetry
+        poetry config virtualenvs.create false
+        poetry install --no-dev
+    
+    - name: Run ETL
+      env:
+        AUTH_URL: ${{ secrets.AUTH_URL }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        WEBSITE_ID: ${{ secrets.WEBSITE_ID }}
+      run: |
+        if [ "${{ github.event.inputs.date }}" != "" ]; then
+          python etl/main.py --date ${{ github.event.inputs.date }}
+        else
+          python etl/main.py
+        fi
+    
+    - name: Upload output
+      uses: actions/upload-artifact@v3
+      with:
+        name: piwik-data
+        path: output/
