@@ -1,8 +1,7 @@
 name: Piwik ETL
 
 on:
-  schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  #schedule: - cron: '0 2 * * *'  # Daily at 2 AM UTC
   workflow_dispatch:
     inputs:
       date:
