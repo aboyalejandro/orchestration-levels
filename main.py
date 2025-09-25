@@ -8,8 +8,8 @@ import os
 import logging
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from piwik import get_token, extract_endpoint
-from s3 import create_s3_client, upload_to_s3
+from src.piwik import get_token, extract_endpoint
+from src.s3 import create_s3_client, upload_to_s3
 
 # Configure logging
 logging.basicConfig(
