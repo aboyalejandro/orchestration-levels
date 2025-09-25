@@ -1,5 +1,5 @@
 import requests
-from payloads import SESSIONS, EVENTS, ANALYTICS
+from .payloads import SESSIONS, EVENTS, ANALYTICS
 
 
 def get_token(auth_url, client_id, client_secret):
