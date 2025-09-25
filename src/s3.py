@@ -8,8 +8,10 @@ logger = logging.getLogger(__name__)
 
 def create_s3_client(aws_access_key, aws_secret_key, aws_region):
     """Create S3 client"""
-    if aws_access_key and aws_secret_key:
+    # Check if we have valid credentials (not None and not empty strings)
+    if aws_access_key and aws_secret_key and aws_access_key.strip() and aws_secret_key.strip():
         # Local/GitHub Actions with explicit credentials
+        logger.info("🔑 Using explicit AWS credentials")
         return boto3.client(
             "s3",
             aws_access_key_id=aws_access_key,
@@ -18,6 +20,7 @@ def create_s3_client(aws_access_key, aws_secret_key, aws_region):
         )
     else:
         # Lambda/ECS with IAM role (no explicit credentials needed)
+        logger.info("🔒 Using IAM role for S3 access")
         return boto3.client("s3", region_name=aws_region)
 
 

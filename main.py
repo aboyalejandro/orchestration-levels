@@ -38,7 +38,7 @@ def main():
     s3_client = (
         None
         if local_mode
-        else create_s3_client(aws_access_key, aws_secret_key, aws_region)
+        else create_s3_client(aws_access_key or None, aws_secret_key or None, aws_region)
     )
 
     # Get token
