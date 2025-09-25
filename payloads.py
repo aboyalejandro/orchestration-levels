@@ -1,0 +1,47 @@
+SESSIONS = [
+    {"column_id": "visitor_session_number"},
+    {"column_id": "visitor_returning"},
+    {"column_id": "source_medium"},
+    {"column_id": "campaign_name"},
+    {"column_id": "session_goals"},
+    {"column_id": "session_total_page_views"},
+    {"column_id": "session_total_events"},
+    {"column_id": "visitor_days_since_last_session"},
+    {"column_id": "visitor_days_since_first_session"},
+    {"column_id": "location_country_name"},
+]
+
+EVENTS = [
+    {"column_id": "event_index"},
+    {"column_id": "page_view_index"},
+    {"column_id": "custom_event_category"},
+    {"column_id": "custom_event_action"},
+    {"column_id": "custom_event_name"},
+    {"column_id": "event_url"},
+    {"column_id": "source_medium"},
+    {"column_id": "campaign_name"},
+    {"column_id": "goal_id"},
+]
+
+ANALYTICS = [
+    {"transformation_id": "to_date", "column_id": "timestamp"},
+    {"column_id": "referrer_type"},
+    {"column_id": "source_medium"},
+    {"column_id": "campaign_name"},
+    {"column_id": "campaign_content"},
+    {"column_id": "session_entry_url"},
+    {"column_id": "visitor_returning"},
+    {"column_id": "location_country_name"},
+    {"column_id": "operating_system"},
+    {"column_id": "device_type"},
+    {"column_id": "location_city_name"},
+    {"column_id": "events"},
+    {"column_id": "visitors"},
+    {"column_id": "sessions"},
+    {"column_id": "page_views"},
+    {"column_id": "ecommerce_conversions"},
+    {"column_id": "cart_additions"},
+    {"column_id": "ecommerce_abandoned_carts"},
+    {"column_id": "consents_none"},
+    {"column_id": "consents_full"},
+]
