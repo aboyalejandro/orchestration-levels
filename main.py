@@ -26,9 +26,9 @@ aws_region = os.getenv("AWS_REGION")
 
 
 def main():
-    # Define date range - process each day from 2021-01-01 to 2021-03-30
+    # Define date range - process each day from 2021-01-01 to 2021-01-31
     start_date = datetime(2021, 1, 1)
-    end_date = datetime(2021, 3, 30)
+    end_date = datetime(2021, 1, 31)
 
     # Create S3 client
     s3_client = create_s3_client(aws_access_key, aws_secret_key, aws_region)
