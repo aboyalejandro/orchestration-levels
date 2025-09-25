@@ -1,4 +1,6 @@
-vevn/
+venv/
 .env
 piwik_demo_site_extract.ipynb
 plan.md
+*.pyc
+__pycache__
