@@ -21,7 +21,11 @@ def create_s3_client(aws_access_key, aws_secret_key, aws_region):
     else:
         # Lambda/ECS with IAM role (no explicit credentials needed)
         logger.info("🔒 Using IAM role for S3 access")
-        return boto3.client("s3", region_name=aws_region)
+        # Let boto3 auto-detect region from Lambda environment
+        if aws_region:
+            return boto3.client("s3", region_name=aws_region)
+        else:
+            return boto3.client("s3")
 
 
 def upload_to_s3(s3_client, s3_bucket, data, s3_key):

@@ -24,7 +24,7 @@ website_id = os.getenv("WEBSITE_ID")
 s3_bucket = os.getenv("S3_BUCKET")
 aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
 aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-aws_region = os.getenv("AWS_REGION")
+aws_region = os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION")
 
 
 def main():
