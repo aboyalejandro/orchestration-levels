@@ -37,7 +37,7 @@ def main():
     token = get_token(auth_url, client_id, client_secret)
 
     # Extract data from all endpoints
-    endpoints = ["sessions", "events", "analytics"]
+    endpoints = ["sessions", "events", "query"]
 
     # Iterate through each day in the date range
     current_date = start_date
