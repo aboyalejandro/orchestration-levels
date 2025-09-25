@@ -53,7 +53,7 @@ This is the expected output:
 crontab: no crontab for alejandroaboy - using an empty one
 crontab: installing new crontab
 (venv) ➜  orchestration-levels git:(main) ✗ crontab -l
-*/5 * * * * /bin/bash -c "cd Users/Desktop/alejandroaboy/orchestration-levels && source venv/bin/ activate && python main.py
+*/5 * * * * /bin/bash -c "cd Users/Desktop/alejandroaboy/orchestration-levels && source venv/bin/ activate && python main.py"
 (venv) ➜  orchestration-levels git:(main) ✗ ls -la piwik-data/
 total 0
 drwxr-xr-x   4 alejandroaboy  staff  128 25 sep 20:23 .
@@ -80,4 +80,3 @@ What this means:
 - Runs daily at 2 AM UTC (see `.github/workflows/etl.yml`)
 - Manual trigger available in Actions tab
 - Your `.env` creds need to be configured as Action Secrets - [Check docs](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets)
-
