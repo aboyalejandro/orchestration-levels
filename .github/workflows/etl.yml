@@ -1,13 +1,8 @@
-name: Piwik ETL
+name: Orchestration Levels - Piwik ETL
 
 on:
   #schedule: - cron: '0 2 * * *'  # Daily at 2 AM UTC
   workflow_dispatch:
-    inputs:
-      date:
-        description: 'Date to process (YYYY-MM-DD)'
-        required: false
-        default: ''
 
 jobs:
   etl:
@@ -16,33 +11,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
+    - name: Create .env file
       run: |
-        pip install poetry
-        poetry config virtualenvs.create false
-        poetry install --no-dev
+        cat << EOF > .env
+        AUTH_URL=${{ secrets.AUTH_URL }}
+        BASE_URL=${{ secrets.BASE_URL }}
+        CLIENT_ID=${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
+        WEBSITE_ID=${{ secrets.WEBSITE_ID }}
+        S3_BUCKET=${{ secrets.S3_BUCKET }}
+        AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION=${{ secrets.AWS_REGION }}
+        EOF
     
-    - name: Run ETL
-      env:
-        AUTH_URL: ${{ secrets.AUTH_URL }}
-        BASE_URL: ${{ secrets.BASE_URL }}
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        WEBSITE_ID: ${{ secrets.WEBSITE_ID }}
+    - name: Build Docker image
       run: |
-        if [ "${{ github.event.inputs.date }}" != "" ]; then
-          python etl/main.py --date ${{ github.event.inputs.date }}
-        else
-          python etl/main.py
-        fi
+        docker build -t piwik-etl .
     
-    - name: Upload output
-      uses: actions/upload-artifact@v3
-      with:
-        name: piwik-data
-        path: output/
+    - name: Run ETL with Docker
+      run: |
+        docker run --rm --env-file .env piwik-etl
