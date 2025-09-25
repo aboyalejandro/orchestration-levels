@@ -34,6 +34,7 @@ def upload_to_s3(s3_client, s3_bucket, data, s3_key):
             Bucket=s3_bucket, Key=s3_key, Body=json_data, ContentType="application/json"
         )
         logger.info(f"- ☁️  Uploaded data to s3://{s3_bucket}/{s3_key}")
+        logger.info(f"")
         return True
 
     except (NoCredentialsError, ClientError) as e:

@@ -55,6 +55,7 @@ def main():
         day = current_date.strftime("%d")
 
         logger.info(f"📅 Processing data for {date_str}...")
+        logger.info(f" ")
 
         for endpoint in endpoints:
             logger.info(f"- 🔍 Extracting {endpoint} for {date_str}...")
