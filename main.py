@@ -5,10 +5,17 @@ Usage: python main.py --date 2021-01-01
 """
 
 import os
+import logging
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from piwik import get_token, extract_endpoint
 from s3 import create_s3_client, upload_to_s3
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(message)s", handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -47,10 +54,10 @@ def main():
         month = current_date.strftime("%m")
         day = current_date.strftime("%d")
 
-        print(f"Processing data for {date_str}...")
+        logger.info(f"📅 Processing data for {date_str}...")
 
         for endpoint in endpoints:
-            print(f"  Extracting {endpoint} for {date_str}...")
+            logger.info(f"- 🔍 Extracting {endpoint} for {date_str}...")
             data = extract_endpoint(
                 base_url, endpoint, token, website_id, date_str, date_str
             )
@@ -62,7 +69,7 @@ def main():
         # Move to next day
         current_date += timedelta(days=1)
 
-    print(f"ETL completed")
+    logger.info("🎉 ETL completed successfully!")
 
 
 if __name__ == "__main__":
