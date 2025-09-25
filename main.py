@@ -1,15 +1,10 @@
-#!/usr/bin/env python3
-"""
-Minimal Piwik ETL - Extract data and save as JSON files locally
-Usage: python main.py --date 2021-01-01
-"""
-
 import os
 import logging
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from src.piwik import get_token, extract_endpoint
 from src.s3 import create_s3_client, upload_to_s3
+from src.local import save_local, get_args
 
 # Configure logging
 logging.basicConfig(
@@ -33,15 +28,25 @@ aws_region = os.getenv("AWS_REGION")
 
 
 def main():
+
+    local_mode = get_args().local
     # Define date range - process each day from 2021-01-01 to 2021-01-31
     start_date = datetime(2021, 1, 1)
     end_date = datetime(2021, 1, 31)
 
-    # Create S3 client
-    s3_client = create_s3_client(aws_access_key, aws_secret_key, aws_region)
+    # Create S3 client only if not in local mode
+    s3_client = (
+        None
+        if local_mode
+        else create_s3_client(aws_access_key, aws_secret_key, aws_region)
+    )
 
     # Get token
     token = get_token(auth_url, client_id, client_secret)
+
+    # Log storage mode
+    storage_mode = "local /piwik-data directory" if local_mode else "S3"
+    logger.info(f"🗂️  Storage mode: {storage_mode}")
 
     # Extract data from all endpoints
     endpoints = ["sessions", "events", "query"]
@@ -63,9 +68,13 @@ def main():
                 base_url, endpoint, token, website_id, date_str, date_str
             )
 
-            # Upload directly to S3 with date partitioning
-            s3_key = f"piwik-data/{year}/{month}/{day}/{endpoint}.json"
-            upload_to_s3(s3_client, s3_bucket, data, s3_key)
+            # Save data either locally or to S3
+            if local_mode:
+                local_path = f"piwik-data/{year}/{month}/{day}/{endpoint}.json"
+                save_local(data, local_path)
+            else:
+                s3_key = f"piwik-data/{year}/{month}/{day}/{endpoint}.json"
+                upload_to_s3(s3_client, s3_bucket, data, s3_key)
 
         # Move to next day
         current_date += timedelta(days=1)
