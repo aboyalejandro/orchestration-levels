@@ -24,18 +24,22 @@ website_id = os.getenv("WEBSITE_ID")
 s3_bucket = os.getenv("S3_BUCKET")
 aws_region = os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION")
 
-# Only use explicit credentials if running locally or in GitHub Actions
-# In Lambda, these should be None/empty so boto3 uses the IAM role
-aws_access_key = (
-    os.getenv("AWS_ACCESS_KEY_ID")
-    if os.getenv("AWS_LAMBDA_FUNCTION_NAME") is None
-    else None
+# Force no explicit credentials in Lambda - let IAM role handle it
+is_lambda = (
+    os.getenv("AWS_LAMBDA_FUNCTION_NAME") is not None
+    or os.getenv("AWS_EXECUTION_ENV") is not None
 )
-aws_secret_key = (
-    os.getenv("AWS_SECRET_ACCESS_KEY")
-    if os.getenv("AWS_LAMBDA_FUNCTION_NAME") is None
-    else None
-)
+
+if is_lambda:
+    # In Lambda, don't use explicit credentials at all
+    aws_access_key = None
+    aws_secret_key = None
+    logger.info("🔒 Lambda detected - forcing IAM role usage")
+else:
+    # Only in non-Lambda environments (local, GitHub Actions)
+    aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
+    aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+    logger.info("🔑 Non-Lambda environment - using explicit credentials if available")
 
 
 def main():
