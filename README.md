@@ -33,10 +33,6 @@ To follow along, you'll need:
 
 ## 🎯 Flow Levels
 
-This project showcases **4 orchestration levels** for daily batch ETL, from simple local cron to full cloud orchestration. Each level uses the **same containerized ETL code** - only the scheduling mechanism changes.
-
-> **Key principle:** "Orchestrators coordinate; containers compute." Keep heavy processing logic in containers, not in DAG tasks.
-
 ### 1️⃣ Level 1: Local Cron 🕰️
 **What:** Simple Python script + crontab scheduling  
 **Good for:** Proof of concept, single machine, development testing
