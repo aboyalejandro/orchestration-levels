@@ -2,7 +2,9 @@
 
 This repo demonstrates **4 orchestration levels** for daily batch ETL, from simple local cron to full cloud orchestration. Each level uses the **same containerized ETL code** - only the scheduling mechanism changes.
 
-> **Key principle:** "Orchestrators coordinate; containers compute." Keep heavy processing logic in containers, not in DAG tasks.
+We are following an use case of ETL for PiwikPRO, a web analytics tool that tracks events, sessions and other different activity assets.
+
+The code get PiwkPRO auth token, calls 3 different endpoints and exports files to an S3 bucket with a backfill behaviour.
 
 ## 📋 Prerequisites
 
@@ -29,7 +31,7 @@ To follow along, you'll need:
    docker run --rm --env-file .env piwik-etl
    ```
 
-## 🎯 Orchestration Levels
+## 🎯 Flow Levels
 
 This project showcases **4 orchestration levels** for daily batch ETL, from simple local cron to full cloud orchestration. Each level uses the **same containerized ETL code** - only the scheduling mechanism changes.
 
@@ -70,9 +72,7 @@ crontab: installing new crontab
 total 0
 drwxr-xr-x   4 your-user-name  staff  128 25 sep 20:23 .
 drwxr-xr-x@ 17 your-user-name  staff  544 25 sep 20:23 ..
--rw-r--r--   1 your-user-name  staff    0 25 sep 20:20 .gitkeep
 drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
-(venv) ➜  orchestration-levels git:(main) ✗ 
 ```
 
 **File permissions explained:**
