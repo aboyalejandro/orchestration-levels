@@ -98,9 +98,9 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 
 - **Container deployment**: Uses []`.github/workflows/deploy.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/deploy.yml) to push Docker images to AWS ECR
 - **Lambda integration**: Automatically deploys ECR images to Lambda functions
-- **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events. 
+- **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events.
 
-[Image](assets/lambda.png)
+![Lambda Preview](assets/lambda.png)
 
 ### 4️⃣ Level 4: Full Orchestration (Prefect) 🎯
 **What:** Multi-step workflows with dependencies  
@@ -109,6 +109,8 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 - **Advanced orchestration**: Full workflow engine with task dependencies and monitoring
 - **Setup guide**: Follow `prefect/README.md` to enable the Prefect project
 - **Features**: Rich UI, task retries, parallel execution, and observability
+
+![Prefect Preview](assets/prefect.png)
 
 ## 🏗️ Project Structure
 
