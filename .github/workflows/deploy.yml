@@ -29,3 +29,14 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    
+    - name: Update Lambda function
+      env:
+        ECR_REGISTRY: 825765415430.dkr.ecr.eu-west-3.amazonaws.com 
+        ECR_REPOSITORY: orchestration-levels
+        IMAGE_TAG: latest
+        LAMBDA_FUNCTION_NAME: orchestration-levels-ecr
+      run: |
+        aws lambda update-function-code \
+          --function-name $LAMBDA_FUNCTION_NAME \
+          --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
