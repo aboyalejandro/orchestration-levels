@@ -98,7 +98,7 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 
 - **Container deployment**: Uses `.github/workflows/deploy.yml` to push Docker images to AWS ECR
 - **Lambda integration**: Automatically deploys ECR images to Lambda functions
-- **Serverless execution**: Runs on-demand with AWS Lambda's managed infrastructure
+- **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events. 
 
 ### 4️⃣ Level 4: Full Orchestration (Prefect) 🎯
 **What:** Multi-step workflows with dependencies  
