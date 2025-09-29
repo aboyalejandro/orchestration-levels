@@ -1,3 +1,5 @@
 requests
 python-dotenv
 boto3
+prefect
+prefect-aws
