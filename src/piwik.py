@@ -1,5 +1,9 @@
 import requests
+import time
+import logging
 from .payloads import SESSIONS, EVENTS, ANALYTICS
+
+logger = logging.getLogger(__name__)
 
 
 def get_token(auth_url, client_id, client_secret):
@@ -15,7 +19,7 @@ def get_token(auth_url, client_id, client_secret):
 
 
 def extract_endpoint(base_url, endpoint, token, website_id, date_from, date_to):
-    """Extract data from Piwik endpoint"""
+    """Extract data from Piwik endpoint with rate limiting"""
     url = f"{base_url}{endpoint}/"
 
     # Basic payload for all endpoints
@@ -34,11 +38,12 @@ def extract_endpoint(base_url, endpoint, token, website_id, date_from, date_to):
         payload["columns"] = SESSIONS
     elif endpoint == "events":
         payload["columns"] = EVENTS
-
-    else:  # analytics
+    else:  # analytics/query
         payload["columns"] = ANALYTICS
 
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
+
+    time.sleep(1)
 
     response = requests.post(url, json=payload, headers=headers)
     response.raise_for_status()
