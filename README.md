@@ -97,6 +97,8 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 - **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events.
 
 ![Lambda Preview](assets/lambda.png)
+![Lambda Run](assets/lambda_run.png)
+
 
 ### 4️⃣ Level 4: Full Orchestration (Prefect) 🎯
 **What:** Multi-step workflows with dependencies  
