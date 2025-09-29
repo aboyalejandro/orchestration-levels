@@ -96,7 +96,7 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 **What:** Fully managed AWS scheduler + serverless execution  
 **Good for:** < 15min jobs, serverless, auto-scaling
 
-- **Container deployment**: Uses []`.github/workflows/deploy.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/deploy.yml) to push Docker images to AWS ECR
+- **Container deployment**: Uses [`.github/workflows/deploy.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/deploy.yml) to push Docker images to AWS ECR
 - **Lambda integration**: Automatically deploys ECR images to Lambda functions
 - **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events.
 
