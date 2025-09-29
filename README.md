@@ -88,7 +88,7 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 **What:** Containerized ETL + GitHub Actions scheduler  
 **Good for:** Small daily batches, simple CI/CD, container parity
 
-- **Scheduled execution**: Runs daily at 2 AM UTC (see `.github/workflows/etl.yml`)
+- **Scheduled execution**: Runs daily at 2 AM UTC (see [`.github/workflows/etl.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/etl.yml))
 - **Manual triggers**: Available in GitHub Actions tab
 - **Secret management**: Configure your `.env` credentials as Action Secrets - [Setup guide](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets)
 
@@ -96,9 +96,11 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 **What:** Fully managed AWS scheduler + serverless execution  
 **Good for:** < 15min jobs, serverless, auto-scaling
 
-- **Container deployment**: Uses `.github/workflows/deploy.yml` to push Docker images to AWS ECR
+- **Container deployment**: Uses []`.github/workflows/deploy.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/deploy.yml) to push Docker images to AWS ECR
 - **Lambda integration**: Automatically deploys ECR images to Lambda functions
 - **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events. 
+
+[Image](assets/lambda.png)
 
 ### 4️⃣ Level 4: Full Orchestration (Prefect) 🎯
 **What:** Multi-step workflows with dependencies  
