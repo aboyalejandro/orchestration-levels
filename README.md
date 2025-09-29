@@ -1,13 +1,18 @@
-# Orchestration Levels - Piwik ETL
+# 🧭 Orchestration Levels: From Local CRON to Orchestrators
 
-Simple ETL script that extracts data from Piwik API (sessions, events, query) and saves as JSON files.
+This repo demonstrates **4 orchestration levels** for daily batch ETL, from simple local cron to full cloud orchestration. Each level uses the **same containerized ETL code** - only the scheduling mechanism changes.
 
-## If you want to follow along, you will need:
-- Docker Desktop
-- A Piwik PRO Demo Account (To Get API KEYS) - Check [docs](https://help.piwik.pro/support/questions/generate-api-credentials/)
-- AWS Account with S3 bucket, IAM role with ECR/S3 access policies - Check [docs](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html)
+> **Key principle:** "Orchestrators coordinate; containers compute." Keep heavy processing logic in containers, not in DAG tasks.
 
-## Quick Start
+## 📋 Prerequisites
+
+To follow along, you'll need:
+
+- **Docker Desktop** - For containerized deployments
+- **Piwik PRO Demo Account** - [Get API credentials](https://help.piwik.pro/support/questions/generate-api-credentials/)
+- **AWS Account** - With S3 bucket and IAM roles for ECR/S3 access - [Setup guide](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html)
+
+## ⚡ Quick Start
 
 1. **Setup environment:**
    ```bash
@@ -24,9 +29,16 @@ Simple ETL script that extracts data from Piwik API (sessions, events, query) an
    docker run --rm --env-file .env piwik-etl
    ```
 
-## Automation
+## 🎯 Orchestration Levels
 
-## Cron Setup (Local with Virtual Environment)
+This project showcases **4 orchestration levels** for daily batch ETL, from simple local cron to full cloud orchestration. Each level uses the **same containerized ETL code** - only the scheduling mechanism changes.
+
+> **Key principle:** "Orchestrators coordinate; containers compute." Keep heavy processing logic in containers, not in DAG tasks.
+
+### 1️⃣ Level 1: Local Cron 🕰️
+**What:** Simple Python script + crontab scheduling  
+**Good for:** Proof of concept, single machine, development testing
+
 1. **Be in project root:** `/your-path/orchestration-levels`
 2. **Test script first:** 
    ```bash
@@ -46,37 +58,75 @@ Simple ETL script that extracts data from Piwik API (sessions, events, query) an
 6. **Check it works:** `ls -la piwik-data/` (after 5 minutes)
 7. **Remove all cron jobs:** `crontab -r`
 
-This is the expected output:
+**Expected output:**
 
 ```bash
 (venv) ➜  orchestration-levels git:(main) ✗ crontab -e
-crontab: no crontab for alejandroaboy - using an empty one
+crontab: no crontab for your-user-name - using an empty one
 crontab: installing new crontab
 (venv) ➜  orchestration-levels git:(main) ✗ crontab -l
-*/5 * * * * /bin/bash -c "cd Users/Desktop/alejandroaboy/orchestration-levels && source venv/bin/ activate && python main.py"
+*/5 * * * * /bin/bash -c "cd Users/Desktop/your-user-name/orchestration-levels && source venv/bin/ activate && python main.py"
 (venv) ➜  orchestration-levels git:(main) ✗ ls -la piwik-data/
 total 0
-drwxr-xr-x   4 alejandroaboy  staff  128 25 sep 20:23 .
-drwxr-xr-x@ 17 alejandroaboy  staff  544 25 sep 20:23 ..
--rw-r--r--   1 alejandroaboy  staff    0 25 sep 20:20 .gitkeep
-drwxr-xr-x   3 alejandroaboy  staff   96 25 sep 20:22 2021
+drwxr-xr-x   4 your-user-name  staff  128 25 sep 20:23 .
+drwxr-xr-x@ 17 your-user-name  staff  544 25 sep 20:23 ..
+-rw-r--r--   1 your-user-name  staff    0 25 sep 20:20 .gitkeep
+drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 (venv) ➜  orchestration-levels git:(main) ✗ 
 ```
 
-What this means:
+**File permissions explained:**
 
-  - drwxr-xr-x = Directory permissions (d = directory, rwx = read/write/execute for
-  owner, r-x = read/execute for group/others)
-  - -rw-r--r-- = File permissions (- = regular file, rw- = read/write for owner, r-- =
-  read-only for group/others)
-  - 4, 7, 1, 3 = Number of hard links
-  - alejandroaboy staff = Owner and group
-  - 128, 544, 0, 96 = File/directory size in bytes
-  - Date/time = Last modification time
+- `drwxr-xr-x` = Directory permissions (d = directory, rwx = read/write/execute for owner, r-x = read/execute for group/others)
+- `-rw-r--r--` = File permissions (- = regular file, rw- = read/write for owner, r-- = read-only for group/others)
+- `4, 7, 1, 3` = Number of hard links
+- `alejandroaboy staff` = Owner and group
+- `128, 544, 0, 96` = File/directory size in bytes
+- `Date/time` = Last modification time
 
+### 2️⃣ Level 2: GitHub Actions + Docker 🐙
+**What:** Containerized ETL + GitHub Actions scheduler  
+**Good for:** Small daily batches, simple CI/CD, container parity
 
+- **Scheduled execution**: Runs daily at 2 AM UTC (see `.github/workflows/etl.yml`)
+- **Manual triggers**: Available in GitHub Actions tab
+- **Secret management**: Configure your `.env` credentials as Action Secrets - [Setup guide](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets)
 
-## GitHub Actions
-- Runs daily at 2 AM UTC (see `.github/workflows/etl.yml`)
-- Manual trigger available in Actions tab
-- Your `.env` creds need to be configured as Action Secrets - [Check docs](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets)
+### 3️⃣ Level 3: ECR Registry + Lambda ☁️
+**What:** Fully managed AWS scheduler + serverless execution  
+**Good for:** < 15min jobs, serverless, auto-scaling
+
+- **Container deployment**: Uses `.github/workflows/deploy.yml` to push Docker images to AWS ECR
+- **Lambda integration**: Automatically deploys ECR images to Lambda functions
+- **Serverless execution**: Runs on-demand with AWS Lambda's managed infrastructure
+
+### 4️⃣ Level 4: Full Orchestration (Prefect) 🎯
+**What:** Multi-step workflows with dependencies  
+**Good for:** Multi-step pipelines, complex dependencies, enterprise scale
+
+- **Advanced orchestration**: Full workflow engine with task dependencies and monitoring
+- **Setup guide**: Follow `prefect/README.md` to enable the Prefect project
+- **Features**: Rich UI, task retries, parallel execution, and observability
+
+## 🏗️ Project Structure
+
+```
+orchestration-levels/
+├── 📁 .github/workflows/     # CI/CD pipelines
+│   ├── etl.yml              # GitHub Actions ETL
+│   └── deploy.yml           # ECR deployment
+├── 📁 prefect/              # Prefect workflow implementation
+│   ├── etl_flow.py          # Main Prefect flow
+│   ├── deploy.py            # Deployment script
+│   ├── s3.py                # S3 block configuration
+│   └── README.md            # Prefect setup guide
+├── 📁 src/                  # Core ETL modules
+│   ├── piwik.py            # Piwik API integration
+│   ├── s3.py               # S3 utilities
+│   └── local.py            # Local file operations
+├── 🐳 Dockerfile           # Container configuration
+├── 📝 main.py              # Main ETL script
+├── 📋 requirements.txt     # Python dependencies
+├── ⚙️ .env.example         # Environment template
+└── 📚 README.md           # This file
+```
