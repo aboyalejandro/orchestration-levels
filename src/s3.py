@@ -2,14 +2,32 @@ import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
 import json
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 
 def create_s3_client(aws_access_key, aws_secret_key, aws_region):
-    """Create S3 client"""
-    # Check if we have valid credentials (not None and not empty strings)
-    if aws_access_key and aws_secret_key and aws_access_key.strip() and aws_secret_key.strip():
+    """Create S3 client - uses IAM role in Lambda, explicit credentials elsewhere"""
+
+    # Check if we're running in AWS Lambda
+    is_lambda = os.getenv("AWS_LAMBDA_FUNCTION_NAME") is not None
+
+    if is_lambda:
+        # Lambda environment - use IAM role (no explicit credentials)
+        logger.info("🔒 Running in AWS Lambda - using IAM role for S3 access")
+        if aws_region:
+            return boto3.client("s3", region_name=aws_region)
+        else:
+            # Let boto3 auto-detect region from Lambda environment
+            return boto3.client("s3")
+
+    elif (
+        aws_access_key
+        and aws_secret_key
+        and aws_access_key.strip()
+        and aws_secret_key.strip()
+    ):
         # Local/GitHub Actions with explicit credentials
         logger.info("🔑 Using explicit AWS credentials")
         return boto3.client(
@@ -19,9 +37,8 @@ def create_s3_client(aws_access_key, aws_secret_key, aws_region):
             region_name=aws_region,
         )
     else:
-        # Lambda/ECS with IAM role (no explicit credentials needed)
-        logger.info("🔒 Using IAM role for S3 access")
-        # Let boto3 auto-detect region from Lambda environment
+        # Try default credential chain (EC2 instance profile, etc.)
+        logger.info("🔒 Using default AWS credential chain")
         if aws_region:
             return boto3.client("s3", region_name=aws_region)
         else:

@@ -20,16 +20,27 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 website_id = os.getenv("WEBSITE_ID")
 
-# S3 configuration (environment variables only)
+# S3 configuration
 s3_bucket = os.getenv("S3_BUCKET")
-aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
-aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 aws_region = os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION")
+
+# Only use explicit credentials if running locally or in GitHub Actions
+# In Lambda, these should be None/empty so boto3 uses the IAM role
+aws_access_key = (
+    os.getenv("AWS_ACCESS_KEY_ID")
+    if os.getenv("AWS_LAMBDA_FUNCTION_NAME") is None
+    else None
+)
+aws_secret_key = (
+    os.getenv("AWS_SECRET_ACCESS_KEY")
+    if os.getenv("AWS_LAMBDA_FUNCTION_NAME") is None
+    else None
+)
 
 
 def main():
-
     local_mode = get_args().local
+
     # Define date range - process each day from 2021-01-01 to 2021-01-31
     start_date = datetime(2021, 1, 1)
     end_date = datetime(2021, 1, 31)
@@ -38,7 +49,7 @@ def main():
     s3_client = (
         None
         if local_mode
-        else create_s3_client(aws_access_key or None, aws_secret_key or None, aws_region)
+        else create_s3_client(aws_access_key, aws_secret_key, aws_region)
     )
 
     # Get token
