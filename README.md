@@ -78,7 +78,7 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 - `drwxr-xr-x` = Directory permissions (d = directory, rwx = read/write/execute for owner, r-x = read/execute for group/others)
 - `-rw-r--r--` = File permissions (- = regular file, rw- = read/write for owner, r-- = read-only for group/others)
 - `4, 7, 1, 3` = Number of hard links
-- `alejandroaboy staff` = Owner and group
+- `your-user-name staff` = Owner and group
 - `128, 544, 0, 96` = File/directory size in bytes
 - `Date/time` = Last modification time
 
