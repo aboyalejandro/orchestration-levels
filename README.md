@@ -37,6 +37,8 @@ To follow along, you'll need:
 **What:** Simple Python script + crontab scheduling  
 **Good for:** Proof of concept, single machine, development testing
 
+![Level 1](assets/lvl_1.png)
+
 1. **Be in project root:** `/your-path/orchestration-levels`
 2. **Test script first:** 
    ```bash
@@ -84,6 +86,8 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 **What:** Containerized ETL + GitHub Actions scheduler  
 **Good for:** Small daily batches, simple CI/CD, container parity
 
+![Level 2](assets/lvl_2.png)
+
 - **Scheduled execution**: Runs daily at 2 AM UTC (see [`.github/workflows/etl.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/etl.yml))
 - **Manual triggers**: Available in GitHub Actions tab
 - **Secret management**: Configure your `.env` credentials as Action Secrets - [Setup guide](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets)
@@ -95,6 +99,10 @@ drwxr-xr-x   3 your-user-name  staff   96 25 sep 20:22 2021
 - **Container deployment**: Uses [`.github/workflows/deploy.yml`](https://github.com/aboyalejandro/orchestration-levels/blob/main/.github/workflows/deploy.yml) to push Docker images to AWS ECR
 - **Lambda integration**: Automatically deploys ECR images to Lambda functions
 - **EventBridge scheduling**: Can be trigger on a schedule with CLoudWatch events.
+
+![Level 3](assets/lvl_3.png)
+
+#### How it looks when you run it
 
 ![Lambda Preview](assets/lambda.png)
 ![Lambda Run](assets/lambda_run.png)
