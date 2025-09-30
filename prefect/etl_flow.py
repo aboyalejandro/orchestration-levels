@@ -113,8 +113,9 @@ def get_date_range(start_date: datetime, end_date: datetime) -> List[str]:
 
 @flow(name="piwik-etl-flow")
 def piwik_etl_flow(
+    # Processing 3 days of data
     start_date: datetime = datetime(2021, 1, 1),
-    end_date: datetime = datetime(2021, 1, 31),
+    end_date: datetime = datetime(2021, 1, 3),
 ):
     """
     Main Prefect flow for Piwik ETL process

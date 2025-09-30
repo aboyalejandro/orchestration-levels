@@ -43,9 +43,9 @@ else:
 def main():
     local_mode = get_args().local
 
-    # Define date range - process each day from 2021-01-01 to 2021-01-31
+    # Processing 3 days of data
     start_date = datetime(2021, 1, 1)
-    end_date = datetime(2021, 1, 31)
+    end_date = datetime(2021, 1, 3)
 
     # Create S3 client only if not in local mode
     s3_client = (
